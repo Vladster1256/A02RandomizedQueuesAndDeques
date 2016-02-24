@@ -41,7 +41,21 @@ public class Deque<Item> implements Iterable<Item>
 	
 	public void addFirst(Item item)
 	{
-
+		Node oldfront = front;
+		front = new Node();
+		front.item = item;
+		front.next = oldfront;
+		front.previous = null;
+		if(isEmpty())
+		{
+			front = back;
+		}
+		else
+		{
+			front.next = oldfront;
+		}
+		size++;
+		assert verify();
 	}
 	
 	public void addLast(Item item)
@@ -50,6 +64,7 @@ public class Deque<Item> implements Iterable<Item>
 		back = new Node();
 		back.item = item;
 		back.next = null;
+		back.previous = oldback;
 		if(isEmpty())
 			front = back;
 		else
@@ -75,7 +90,15 @@ public class Deque<Item> implements Iterable<Item>
 	
 	public Item removeLast()
 	{
-		return null;
+		if(isEmpty())
+			throw new NoSuchElementException("Queue underflow");
+		Item item = back.item;
+		back = back.previous;
+		size--;
+		if(isEmpty())
+			back = null;
+		assert verify();
+		return item;
 		
 	}
 	
@@ -175,12 +198,15 @@ public class Deque<Item> implements Iterable<Item>
 	public static void main(String[] args)
 	{
 		 Deque something = new Deque();
-		 something.addLast("hi");
-		 something.addLast("hello");
-		 something.addLast("this sucks");
-		 String temp = (String) something.removeFirst();
+		 something.addLast("a ");
+		 something.addLast("b ");
+		 something.addFirst("c ");
+		 something.addFirst("d ");
+		 String temp = (String) something.removeLast();
 		 StdOut.print(temp);
 		 temp = (String) something.removeFirst();
+		 StdOut.print(temp);
+		 temp = (String) something.removeLast();
 		 StdOut.print(temp);
 		 temp = (String) something.removeFirst();
 		 StdOut.print(temp);
