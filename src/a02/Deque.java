@@ -1,40 +1,76 @@
 package a02;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Deque<Item> implements Iterable<Item>
 {
+	private int size;         // number of elements on queue
+    private Node front;    // beginning of queue
+    private Node back; 	   // end of queue
+	
+	private class Node 
+	{
+		private Item item;
+		private Node next;
+		private Node previous;
+    }
+	
 	public Deque()
 	{
-		
+		front = null;
+		back = null;
+		size = 0;
 	}
 	
 	public boolean isEmpty()
 	{
-		return false;
-		
+		if(front == null)
+			return true;
+		else
+			return false;
 	}
 	
 	public int size()
 	{
-		return 0;
-		
+		return size;
+
 	}
 	
 	public void addFirst(Item item)
 	{
-		
+
 	}
 	
 	public void addLast(Item item)
 	{
-		
+		Node oldback = back;
+		back = new Node();
+		back.item = item;
+		back.next = null;
+		if(isEmpty())
+			front = back;
+		else
+		{
+			oldback.next = back;
+		}
+		size++;
+		assert verify();
 	}
 	
 	public Item removeFirst()
 	{
-		return null;
-		
+		if(isEmpty())
+			throw new NoSuchElementException("Queue underflow");
+		Item item = front.item;
+		front = front.next;
+		size--;
+		if(isEmpty())
+			back = null;
+		assert verify();
+		return item;
 	}
 	
 	public Item removeLast()
@@ -42,17 +78,112 @@ public class Deque<Item> implements Iterable<Item>
 		return null;
 		
 	}
+	
+	private boolean verify()
+	{
+		if(size < 0)
+		{
+			return false;
+		}
+		
+		else if(size == 0)
+		{
+			if(front != null)
+				return false;
+			if(back != null)
+				return false;
+		}
+		
+		else if(size == 1)
+		{
+			if(front == null || back == null)
+				return false;
+			if(front != back)
+				return false;
+			if(front.next != null)
+				return false;
+		}
+		
+		else
+		{
+			if(front == null || back == null)
+				return false;
+			if(front == back)
+				return false;
+			if(front.next == null)
+				return false;
+			if(back.next != null)
+				return false;
+			
+			//verify that the size is equal to the number of actual nodes that exist.
+			int nodeCount = 0;
+			Node checker = front;
+			for(int i = 0; i < size; i++)
+			{
+				if(checker != null && nodeCount <= size)
+				{
+					nodeCount++;
+					checker = checker.next;
+				}
+			}
+			
+			Node backChecker = front;
+			while(backChecker.next != null)
+			{
+				backChecker = backChecker.next;
+			}
+			if(back != backChecker)
+				return false;
+		}
+		return true;
+	}
 
 	@Override
 	public Iterator<Item> iterator()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new ItemIterator();
 	}
 	
+	private class ItemIterator implements Iterator<Item>
+	{
+		private Node current = front;
+
+		public boolean hasNext()
+		{
+			if(current != null)
+				return true;
+			else
+				return false;
+		}
+		
+		public void remove()      
+		{ 
+			throw new UnsupportedOperationException();  
+		}
+
+		public Item next()
+		{
+			if (!hasNext()) throw new NoSuchElementException();
+            Item item = current.item;
+            current = current.next; 
+            return item;
+		}
+		
+	}
+	
+
 	public static void main(String[] args)
 	{
-		
+		 Deque something = new Deque();
+		 something.addLast("hi");
+		 something.addLast("hello");
+		 something.addLast("this sucks");
+		 String temp = (String) something.removeFirst();
+		 StdOut.print(temp);
+		 temp = (String) something.removeFirst();
+		 StdOut.print(temp);
+		 temp = (String) something.removeFirst();
+		 StdOut.print(temp);
 	}
 
 }
