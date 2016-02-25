@@ -138,13 +138,21 @@ public class RandomizedQueue<Item> implements Iterable<Item>
 		{
 			something.enqueue(Integer.toString(i));
 		}
-
-		for (int x = 0; x < 40; x++)
-		{
-			StdOut.print(something.queue[x] + " ");
-		}
+		StdOut.println();
 		StdOut.println("Here is the random dequeued stuff");
-		for (int j = 0; j < 10; j++)
+		for (int j = 0; j < 40; j++)
+		{
+			String temp = (String) something.dequeue();
+			StdOut.print(temp + " ");
+		}
+		StdOut.println();
+		StdOut.println("We are filling the array again to make sure that we don't get null pointer exception if we fill again on an empty array");
+		for (int i = 0; i < 40; i++)
+		{
+			something.enqueue(Integer.toString(i));
+		}
+		StdOut.println("Here is the random dequeued stuff second run to see if we get null pointer exception");
+		for (int j = 0; j < 40; j++)
 		{
 			String temp = (String) something.dequeue();
 			StdOut.print(temp + " ");

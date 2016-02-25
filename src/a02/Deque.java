@@ -45,20 +45,31 @@ public class Deque<Item> implements Iterable<Item>
 			throw new NullPointerException("Don't insert Nulls dude");
 		else
 		{
-			Node<Item> oldfront = front;
-			front = new Node<Item>();
-			front.item = item;
-			front.next = oldfront;
-			front.previous = null;
-			if (isEmpty())
+			if (size == 0)
 			{
-				front = back;
+				front = new Node<Item>();
+				front.item = item;
+				front.next = null;
+				front.previous = null;
+				back = front;
+				size++;
 			} else
 			{
+				Node<Item> oldfront = front;
+				front = new Node<Item>();
+				front.item = item;
 				front.next = oldfront;
+				front.previous = null;
+				if (isEmpty())
+				{
+					front = back;
+				} else
+				{
+					front.next = oldfront;
+				}
+				size++;
+				assert verify();
 			}
-			size++;
-			assert verify();
 		}
 	}
 
@@ -68,19 +79,30 @@ public class Deque<Item> implements Iterable<Item>
 			throw new NullPointerException("Don't insert Nulls dude");
 		else
 		{
-			Node<Item> oldback = back;
-			back = new Node<Item>();
-			back.item = item;
-			back.next = null;
-			back.previous = oldback;
-			if (isEmpty())
-				front = back;
-			else
+			if (size == 0)
 			{
-				oldback.next = back;
+				front = new Node<Item>();
+				front.item = item;
+				front.next = null;
+				front.previous = null;
+				back = front;
+				size++;
+			} else
+			{
+				Node<Item> oldback = back;
+				back = new Node<Item>();
+				back.item = item;
+				back.next = null;
+				back.previous = oldback;
+				if (isEmpty())
+					front = back;
+				else
+				{
+					oldback.next = back;
+				}
+				size++;
+				assert verify();
 			}
-			size++;
-			assert verify();
 		}
 	}
 
@@ -215,6 +237,30 @@ public class Deque<Item> implements Iterable<Item>
 		int temp = (int) something.removeLast();
 		StdOut.print(temp);
 		temp = (int) something.removeFirst();
+		StdOut.print(temp);
+		temp = (int) something.removeLast();
+		StdOut.print(temp);
+		temp = (int) something.removeFirst();
+		StdOut.print(temp);
+		something.addLast(1);
+		something.addLast(2);
+		something.addFirst(3);
+		something.addFirst(4);
+		temp = (int) something.removeLast();
+		StdOut.print(temp);
+		temp = (int) something.removeFirst();
+		StdOut.print(temp);
+		temp = (int) something.removeLast();
+		StdOut.print(temp);
+		temp = (int) something.removeFirst();
+		StdOut.print(temp);
+		something.addLast(1);
+		something.addLast(2);
+		something.addFirst(3);
+		something.addFirst(4);
+		temp = (int) something.removeFirst();
+		StdOut.print(temp);
+		temp = (int) something.removeLast();
 		StdOut.print(temp);
 		temp = (int) something.removeLast();
 		StdOut.print(temp);
